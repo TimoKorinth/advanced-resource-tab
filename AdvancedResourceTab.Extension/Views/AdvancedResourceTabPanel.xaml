@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="AdvancedResourceTab.Extension.Views.AdvancedResourceTabPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:AdvancedResourceTab.Extension.ViewModels"
+             xmlns:utilitycontrols="clr-namespace:Microsoft.Expression.Utility.Controls;assembly=Microsoft.Expression.Utility"
+             xmlns:data="clr-namespace:Microsoft.Expression.Utility.Data;assembly=Microsoft.Expression.Utility"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+        <data:NotConverter x:Key="NotConverter" />
+    </UserControl.Resources>
+    
+    <Grid VerticalAlignment="Top" Margin="0,0,2,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <Rectangle Fill="#FF595959" Grid.ColumnSpan="2" />
+        
+        <utilitycontrols:ClearableTextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Margin="4" OverlayText="Search resources" />
+
+        <utilitycontrols:RadioButtonGroup Grid.Column="1" Style="{DynamicResource ToggleButtonContainer}" VerticalAlignment="Center" Margin="0,0,2,0">
+            <utilitycontrols:WorkaroundRadioButton utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Justify_11694.png" 
+                                                   utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Justify_11694.png" 
+                                                   Style="{DynamicResource IconToggleButtonStyle}" 
+                                                   IsChecked="{Binding IsSearchIncludingSubitems, Mode=TwoWay, Converter={StaticResource NotConverter}}"
+                                                   ToolTip="Filtering resource dictionaries only" />
+            <utilitycontrols:WorkaroundRadioButton utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/LeftJustify_11695.png" 
+                                                   utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/LeftJustify_11695.png" 
+                                                   Style="{DynamicResource IconToggleButtonStyle}"
+                                                   IsChecked="{Binding IsSearchIncludingSubitems, Mode=TwoWay}"
+                                                   ToolTip="Filtering resource dictionaries and (sub)-resources" />
+        </utilitycontrols:RadioButtonGroup>
+
+    </Grid>
+</UserControl>

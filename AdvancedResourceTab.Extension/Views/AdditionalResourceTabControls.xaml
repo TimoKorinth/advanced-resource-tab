@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="AdvancedResourceTab.Extension.Views.AdditionalResourceTabControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:utilitycontrols="clr-namespace:Microsoft.Expression.Utility.Controls;assembly=Microsoft.Expression.Utility"
+             xmlns:data="clr-namespace:Microsoft.Expression.Utility.Data;assembly=Microsoft.Expression.Utility"
+             mc:Ignorable="d" Margin="48,0,20,0" Height="18"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <data:NotConverter x:Key="NotConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <utilitycontrols:RadioButtonGroup Style="{DynamicResource ToggleButtonContainer}" VerticalAlignment="Center" Margin="0,0,4,0">
+            <utilitycontrols:WorkaroundRadioButton utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/SortAscending_275.png" 
+                                                       utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/SortAscending_275.png" 
+                                                       Style="{DynamicResource IconToggleButtonStyle}" 
+                                                       IsChecked="{Binding IsSortAscending, Mode=TwoWay}"
+                                                       ToolTip="Ordering resource dictionaries ascending" />
+            <utilitycontrols:WorkaroundRadioButton utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/SortDescending_276.png" 
+                                                       utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/SortDescending_276.png" 
+                                                       Style="{DynamicResource IconToggleButtonStyle}"
+                                                       IsChecked="{Binding IsSortAscending, Mode=TwoWay, Converter={StaticResource NotConverter}}"
+                                                       ToolTip="Ordering resource dictionaries descending" />
+        </utilitycontrols:RadioButtonGroup>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Style="{DynamicResource IconButtonStyle}" 
+                    utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Expand.png"
+                    utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Expand.png" 
+                    Command="{Binding ExpandAllResourceDictionariesCommand}"
+                    ToolTip="Expand all resource dictionaries" />
+            <Button Style="{DynamicResource IconButtonStyle}" 
+                    utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Collapse.png"
+                    utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Collapse.png" 
+                    Command="{Binding CollapseAllResourceDictionariesCommand}" 
+                    ToolTip="Collapse all resource dictionaries" />
+        </StackPanel>
+        
+    </Grid>
+</UserControl>
