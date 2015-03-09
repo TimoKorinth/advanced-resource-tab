@@ -1,10 +1,10 @@
 # Advanced Resource Tab
-### for Blend for Visual Studio 2012
+### for Blend for Visual Studio 2012 and 2013
 Advanced Resource Tab is an extension to Blend for Visual Studio which adds an additional tab window to get more control over the default resource tab.
 
-Advanced Resource Tab is an extension to Blend for Visual Studio 2012 which adds an additional tab window to get more control over the default resource tab.
+Advanced Resource Tab is an extension to Blend for Visual Studio 2012 / 2013 which adds an additional tab window to get more control over the default resource tab.
 
-By default the resource dictionaries in the resource tab of Blend for Visual Studio 2012 (previously Expression Blend) aren't in any useful order. If you got a large number of resources in your solution this is a real pain and time killer, searching for the resources you want. As long as I can imagine, this is fact in Expression Blend.
+By default the resource dictionaries in the resource tab of Blend for Visual Studio (previously Expression Blend) aren't in any useful order. If you got a large number of resources in your solution this is a real pain and time killer, searching for the resources you want. As long as I can imagine, this is fact in Expression Blend.
 
 To get around this annoying bug, I've created the Advanced Resource Tab for Blend.
 
@@ -14,13 +14,20 @@ To get around this annoying bug, I've created the Advanced Resource Tab for Blen
 - Quick Searching / Filtering of resources in the resource tab
 - Include (sub-)resources in searching / filtering
 - Enhances the default resource tab window
-- Regular Blend extension (one dll
+- Regular Blend extension
+- Shortcut to focus the search-field
 
 ![AdvancedResourceTab](http://timokorinth.de/wp-content/uploads/2013/07/AdvancedResourceTab.png)
 
 ## Installation
 
+There are two versions tagged: one for Blend 2012 and another for Blend 2013.
+
+###Blend 2012
 All you have to do is to copy the AdvancedResourceTab.Extension.dll into the extension folder of Blend. Typically this is "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Blend\Extensions".
+
+###Blend 2013
+All you have to do is to copy the AdvancedResourceTab.Extension.dll and *.addin into the extension folder of Blend. Typically this is "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Blend\Addins".
 
 ## Usage
 
