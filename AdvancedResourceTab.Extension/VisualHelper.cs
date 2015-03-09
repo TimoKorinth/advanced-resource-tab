@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
-
-namespace AdvancedResourceTab.Extension
+﻿namespace AdvancedResourceTab.Extension
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Media;
+
     public static class VisualHelper
     {
+        #region Public Methods and Operators
+
         /// <summary>
-        ///   Returns the first ancester of specified type.
+        ///     Returns the first ancester of specified type.
         /// </summary>
         /// <typeparam name="T"> The dependency object type. </typeparam>
         /// <param name="current"> The current. </param>
@@ -38,7 +37,7 @@ namespace AdvancedResourceTab.Extension
         }
 
         /// <summary>
-        ///   Returns a specific ancester of an object.
+        ///     Returns a specific ancester of an object.
         /// </summary>
         /// <typeparam name="T"> The dependency object type. </typeparam>
         /// <param name="current"> The current. </param>
@@ -54,8 +53,7 @@ namespace AdvancedResourceTab.Extension
             while (current != null)
             {
                 // ReSharper disable PossibleUnintendedReferenceComparison
-                if (current is T && current == lookupItem)
-                // ReSharper restore PossibleUnintendedReferenceComparison
+                if (current is T && current == lookupItem) // ReSharper restore PossibleUnintendedReferenceComparison
                 {
                     return (T)current;
                 }
@@ -66,7 +64,7 @@ namespace AdvancedResourceTab.Extension
         }
 
         /// <summary>
-        ///   Finds an ancestor object by name and type.
+        ///     Finds an ancestor object by name and type.
         /// </summary>
         /// <typeparam name="T"> The dependency object type. </typeparam>
         /// <param name="current"> The current. </param>
@@ -101,7 +99,7 @@ namespace AdvancedResourceTab.Extension
         }
 
         /// <summary>
-        ///   Looks for a child control within a parent by name.
+        ///     Looks for a child control within a parent by name.
         /// </summary>
         /// <typeparam name="T"> The dependency object type. </typeparam>
         /// <param name="parent"> The parent. </param>
@@ -117,10 +115,10 @@ namespace AdvancedResourceTab.Extension
 
             T foundChild = null;
 
-            var childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (var i = 0; i < childrenCount; i++)
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
                 // If the child is not of the request child type child
                 var childType = child as T;
@@ -168,7 +166,7 @@ namespace AdvancedResourceTab.Extension
         }
 
         /// <summary>
-        ///   Looks for a child control within a parent by type.
+        ///     Looks for a child control within a parent by type.
         /// </summary>
         /// <typeparam name="T"> The dependency object type. </typeparam>
         /// <param name="parent"> The parent. </param>
@@ -183,10 +181,10 @@ namespace AdvancedResourceTab.Extension
 
             T foundChild = null;
 
-            var childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (var i = 0; i < childrenCount; i++)
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
                 // If the child is not of the request child type child
                 var childType = child as T;
@@ -210,5 +208,7 @@ namespace AdvancedResourceTab.Extension
             }
             return foundChild;
         }
+
+        #endregion
     }
 }

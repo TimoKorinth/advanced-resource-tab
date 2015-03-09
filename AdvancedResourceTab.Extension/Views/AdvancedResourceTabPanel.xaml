@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:vm="clr-namespace:AdvancedResourceTab.Extension.ViewModels"
              xmlns:utilitycontrols="clr-namespace:Microsoft.Expression.Utility.Controls;assembly=Microsoft.Expression.Utility"
              xmlns:data="clr-namespace:Microsoft.Expression.Utility.Data;assembly=Microsoft.Expression.Utility"
              mc:Ignorable="d" 
@@ -20,10 +19,11 @@
         </Grid.ColumnDefinitions>
         
         <Rectangle Fill="#FF595959" Grid.ColumnSpan="2" />
-        
-        <utilitycontrols:ClearableTextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Margin="4" OverlayText="Search resources" />
 
+        <utilitycontrols:ClearableSearchTextBox     x:Name="searchTextBox"
+                                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Margin="4" OverlayText="Search resources (Strg + Ü)" />
+        
         <utilitycontrols:RadioButtonGroup Grid.Column="1" Style="{DynamicResource ToggleButtonContainer}" VerticalAlignment="Center" Margin="0,0,2,0">
             <utilitycontrols:WorkaroundRadioButton utilitycontrols:Icon.SelectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Justify_11694.png" 
                                                    utilitycontrols:Icon.DeselectedImage="pack://application:,,,/AdvancedResourceTab.Extension;component/Media/Justify_11694.png" 

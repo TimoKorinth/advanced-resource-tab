@@ -1,96 +1,99 @@
-﻿using AdvancedResourceTab.Extension.Views;
-using Microsoft.Expression.DesignSurface.UserInterface.ResourcePane;
-using Microsoft.Expression.Framework.UserInterface;
-using Microsoft.Expression.Utility.Controls;
-using Microsoft.Expression.Utility.Data;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-
-namespace AdvancedResourceTab.Extension.ViewModels
+﻿namespace AdvancedResourceTab.Extension.ViewModels
 {
+    using System;
+    using System.Linq;
+    using System.ComponentModel;
+
+    using AdvancedResourceTab.Extension.Views;
+
+    using Microsoft.Expression.DesignSurface.UserInterface.ResourcePane;
+    using Microsoft.Expression.Utility.Data;
+
     public class AdditionalResourceTabControlsViewModel : INotifyPropertyChanged
     {
-        #region Private members
+        #region Fields
 
-        private ICollectionView _resourceCollection;
-        private bool _isSortAscending = true;
-        private DelegateCommand _expandAllResourceDictionariesCommand;
-        private DelegateCommand _collapseAllResourceDictionariesCommand;
-        private AdditionalResourceTabControls _view;
+        private DelegateCommand collapseAllResourceDictionariesCommand;
+
+        private DelegateCommand expandAllResourceDictionariesCommand;
+
+        private bool isSortAscending = true;
+
+        private ICollectionView resourceCollection;
+
+        private AdditionalResourceTabControls view;
 
         #endregion
 
-        #region Events
+        #region Public Events
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
-        #region Properties
+        #region Public Properties
 
-        public ICollectionView ResourceCollection
+        public DelegateCommand CollapseAllResourceDictionariesCommand
         {
-            get { return _resourceCollection; }
+            get
+            {
+                if (this.collapseAllResourceDictionariesCommand == null)
+                {
+                    this.collapseAllResourceDictionariesCommand = new DelegateCommand(this.OnCollapseAllResourceDictionariesCommandExecute);
+                }
+                return this.collapseAllResourceDictionariesCommand;
+            }
             set
             {
-                _resourceCollection = value;
-                RaisePropertyChanged("ResourceCollection");
-
-                UpdateSorting();
+                this.collapseAllResourceDictionariesCommand = value;
+                this.RaisePropertyChanged("CollapseAllResourceDictionariesCommand");
             }
         }
 
         public DelegateCommand ExpandAllResourceDictionariesCommand
         {
-            get 
+            get
             {
-                if (_expandAllResourceDictionariesCommand == null)
+                if (this.expandAllResourceDictionariesCommand == null)
                 {
-                    _expandAllResourceDictionariesCommand = new DelegateCommand(OnExpandAllResourceDictionariesCommandExecute);
+                    this.expandAllResourceDictionariesCommand = new DelegateCommand(this.OnExpandAllResourceDictionariesCommandExecute);
                 }
-                return _expandAllResourceDictionariesCommand; 
+                return this.expandAllResourceDictionariesCommand;
             }
             set
             {
-                _expandAllResourceDictionariesCommand = value;
-                RaisePropertyChanged("ExpandAllResourceDictionariesCommand");
-            }
-        }
-
-        public DelegateCommand CollapseAllResourceDictionariesCommand
-        {
-            get 
-            {
-                if (_collapseAllResourceDictionariesCommand == null)
-                {
-                    _collapseAllResourceDictionariesCommand = new DelegateCommand(OnCollapseAllResourceDictionariesCommandExecute);
-                }
-                return _collapseAllResourceDictionariesCommand; 
-            }
-            set
-            {
-                _collapseAllResourceDictionariesCommand = value;
-                RaisePropertyChanged("CollapseAllResourceDictionariesCommand");
+                this.expandAllResourceDictionariesCommand = value;
+                this.RaisePropertyChanged("ExpandAllResourceDictionariesCommand");
             }
         }
 
         public bool IsSortAscending
         {
-            get { return _isSortAscending; }
+            get
+            {
+                return this.isSortAscending;
+            }
             set
             {
-                _isSortAscending = value;
-                RaisePropertyChanged("IsSortAscending");
+                this.isSortAscending = value;
+                this.RaisePropertyChanged("IsSortAscending");
 
-                UpdateSorting();
+                this.UpdateSorting();
+            }
+        }
+
+        public ICollectionView ResourceCollection
+        {
+            get
+            {
+                return this.resourceCollection;
+            }
+            set
+            {
+                this.resourceCollection = value;
+                this.RaisePropertyChanged("ResourceCollection");
+
+                this.UpdateSorting();
             }
         }
 
@@ -98,39 +101,27 @@ namespace AdvancedResourceTab.Extension.ViewModels
         {
             get
             {
-                if (_view == null)
+                if (this.view == null)
                 {
-                    _view = new AdditionalResourceTabControls();
-                    _view.DataContext = this;
+                    this.view = new AdditionalResourceTabControls();
+                    this.view.DataContext = this;
                 }
-                return _view;
+                return this.view;
             }
             set
             {
-                _view = value;
-                RaisePropertyChanged("View");
+                this.view = value;
+                this.RaisePropertyChanged("View");
             }
         }
 
-        #endregion        
+        #endregion
 
-        #region Private methods
-
-        private void OnExpandAllResourceDictionariesCommandExecute()
-        {
-            foreach (var item in _resourceCollection)
-            {
-                var resourceContainer = item as ResourceContainer;
-                if (resourceContainer != null)
-                {
-                    resourceContainer.IsExpanded = true;
-                }
-            }
-        }
+        #region Methods
 
         private void OnCollapseAllResourceDictionariesCommandExecute()
         {
-            foreach (var item in _resourceCollection)
+            foreach (object item in this.resourceCollection)
             {
                 var resourceContainer = item as ResourceContainer;
                 if (resourceContainer != null)
@@ -140,23 +131,35 @@ namespace AdvancedResourceTab.Extension.ViewModels
             }
         }
 
-        private void UpdateSorting()
+        private void OnExpandAllResourceDictionariesCommandExecute()
         {
-            if (_resourceCollection == null)
+            foreach (object item in this.resourceCollection)
             {
-                return;
+                var resourceContainer = item as ResourceContainer;
+                if (resourceContainer != null)
+                {
+                    resourceContainer.IsExpanded = true;
+                }
             }
-
-            _resourceCollection.SortDescriptions.Clear();
-            _resourceCollection.SortDescriptions.Add(new SortDescription("Name", IsSortAscending ? ListSortDirection.Ascending : ListSortDirection.Descending));
         }
 
         private void RaisePropertyChanged(string property)
         {
-            if (PropertyChanged != null)
+            if (this.PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
+        }
+
+        private void UpdateSorting()
+        {
+            if (this.resourceCollection == null)
+            {
+                return;
+            }
+
+            this.resourceCollection.SortDescriptions.Clear();
+            this.resourceCollection.SortDescriptions.Add(new SortDescription("Name", this.IsSortAscending ? ListSortDirection.Ascending : ListSortDirection.Descending));
         }
 
         #endregion

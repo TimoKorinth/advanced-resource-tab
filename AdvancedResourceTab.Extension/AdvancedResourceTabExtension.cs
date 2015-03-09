@@ -1,43 +1,49 @@
-﻿using AdvancedResourceTab.Extension.ViewModels;
-using Microsoft.Expression.DesignSurface.UserInterface.ResourcePane;
-using Microsoft.Expression.Extensibility;
-using Microsoft.Expression.Framework.UserInterface;
-using Microsoft.Expression.Utility.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace AdvancedResourceTab.Extension
+﻿namespace AdvancedResourceTab.Extension
 {
-    [Export(typeof(IPackage))]
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+
+    using AdvancedResourceTab.Extension.ViewModels;
+
+    using Microsoft.Expression.Framework;
+    using Microsoft.Expression.Framework.UserInterface;
+    using Microsoft.Expression.Utility.Controls;
+    using Microsoft.Expression.Utility.Extensions;
+
     public class AdvancedResourceTabExtension : IPackage
     {
-        #region Private members
+        #region Fields
 
-        private ItemsControl _itemsControl;
+        private ItemsControl itemsControl;
+
+        private AdvancedResourceTabPanelViewModel mainViewModel;
+
+        private bool isControlPressed;
 
         #endregion
 
-        #region IPackage implementation
+        #region Public Methods and Operators
 
         public void Load(IServices services)
         {
             var windowService = services.GetService<IWindowService>();
-
-            var advancedResourceTabPanelViewModel = new AdvancedResourceTabPanelViewModel(windowService);
-            windowService.RegisterPalette("AdvancedResourceTab", advancedResourceTabPanelViewModel.View, "Advanced Resource Tab");
+            windowService.MainWindow.KeyUp += this.MainWindowKeyUp;
+            windowService.MainWindow.KeyDown += this.MainWindowKeyDown;
+            this.mainViewModel = new AdvancedResourceTabPanelViewModel(windowService);
+            windowService.RegisterPalette("AdvancedResourceTab", this.mainViewModel.View, "Advanced Resource Tab");
 
             var resourcePane = windowService.PaletteRegistry["Designer_ResourcePane"];
             if (resourcePane != null && resourcePane.Content != null)
             {
-                resourcePane.Content.Loaded += ResourcePaneLoaded;
+                resourcePane.Content.Loaded += this.ResourcePaneLoaded;
+            }
+            else
+            {
+                Debug.WriteLine("\t ERROR");
             }
         }
 
@@ -47,29 +53,47 @@ namespace AdvancedResourceTab.Extension
 
         #endregion
 
-        #region Private methods
+        #region Private Methods
 
-        private void ResourcePaneLoaded(object sender, System.Windows.RoutedEventArgs e)
+        private void MainWindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (_itemsControl != null)
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                isControlPressed = true;
+            }
+        }
+
+        private void MainWindowKeyUp(object sender, KeyEventArgs e)
+        {
+            if (this.isControlPressed && e.Key == Key.Oem1)
+            {
+                this.mainViewModel.View.FocusTextBox();
+            }
+            this.isControlPressed = false;
+        }
+
+        private void ResourcePaneLoaded(object sender, RoutedEventArgs e)
+        {
+            if (this.itemsControl != null)
             {
                 return;
             }
 
-            _itemsControl = VisualHelper.FindChild<ItemsControl>(sender as DependencyObject, "ResourceItemSelector");
-            if (_itemsControl != null)
+            this.itemsControl = VisualHelper.FindChild<ItemsControl>(sender as DependencyObject, "ResourceItemSelector");
+            if (this.itemsControl != null)
             {
-                var resourceCollection = CollectionViewSource.GetDefaultView(_itemsControl.ItemsSource);
+                var resourceCollection = CollectionViewSource.GetDefaultView(this.itemsControl.ItemsSource);
                 var radioButtonGroup = VisualHelper.FindChild<RadioButtonGroup>(sender as DependencyObject);
                 if (radioButtonGroup != null)
                 {
                     var parentGrid = radioButtonGroup.Parent as Grid;
                     if (parentGrid != null)
                     {
-                        var additionalResourceTabControlsViewModel = new AdditionalResourceTabControlsViewModel();
-                        additionalResourceTabControlsViewModel.ResourceCollection = resourceCollection;
+                        var additionalResourceTabControlsViewModel = new AdditionalResourceTabControlsViewModel { ResourceCollection = resourceCollection };
+
                         var additionalResourceTabControls = additionalResourceTabControlsViewModel.View;
                         parentGrid.Children.Add(additionalResourceTabControls);
+
                     }
                 }
             }

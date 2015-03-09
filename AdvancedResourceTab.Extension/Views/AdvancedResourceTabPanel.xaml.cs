@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AdvancedResourceTab.Extension.Views
 {
+    using System.Windows.Controls;
+
     /// <summary>
-    /// Interaction logic for AdvancedResourceTabPanel.xaml
+    ///     Interaction logic for AdvancedResourceTabPanel.xaml
     /// </summary>
-    public partial class AdvancedResourceTabPanel : UserControl
+    public partial class AdvancedResourceTabPanel
     {
+        #region Constructors and Destructors
+
         public AdvancedResourceTabPanel()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
+
+        #endregion
+
+        #region Methods
+
+        internal void FocusTextBox()
+        {
+            var result = VisualHelper.FindChild<TextBox>(this.searchTextBox);
+            if (result != null)
+            {
+                result.Focus();
+            }
+        }
+
+        #endregion
     }
 }
